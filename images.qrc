@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/img"/>
+    <qresource prefix="/">
+        <file>images/c_bb.svg</file>
+        <file>images/c_bk.svg</file>
+        <file>images/c_bn.svg</file>
+        <file>images/c_bp.svg</file>
+        <file>images/c_bq.svg</file>
+        <file>images/c_br.svg</file>
+        <file>images/c_wb.svg</file>
+        <file>images/c_wk.svg</file>
+        <file>images/c_wn.svg</file>
+        <file>images/c_wp.svg</file>
+        <file>images/c_wq.svg</file>
+        <file>images/c_wr.svg</file>
+        <file>images/point.svg</file>
+    </qresource>
+</RCC>
