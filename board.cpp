@@ -1,46 +1,148 @@
 #include "board.h"
-#include "ui_board.h"
-#include <QGridLayout>
-Board::Board(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Board)
-{
-    ui->setupUi(this);
-    QGridLayout *layout = new QGridLayout();
-        layout->setSpacing(0);
-        layout->setMargin(0);
-        layout->setVerticalSpacing(0);
-        layout->setHorizontalSpacing(0);
-        layout->setContentsMargins(0, 0, 0, 0);
-        QBrush* dark = new QBrush("#2F4858");
-        QBrush* light = new QBrush("#DFE0DF");
-        QBrush* pincel;
+#include "chesscell.h"
+#include "core.h"
+#include "queen.h"
+#include "tower.h"
+#include "pawn.h"
+#include "king.h"
+#include "horse.h"
+#include "bishop.h"
+#include <QColor>
 
+extern Core *core;
 
+Board::Board() {
+    initializeBlack();  //inicializar las fichas negras
+    initializeWhite();  //inicializar las fichas blancas
+}
 
-        for(int i=0; i<64; i++){
-            if((i+i/8)%2==0){
-                pincel = dark;
-            }else{
-                pincel = light;
-            }
-            QLabel* img = new QLabel();
-            QPixmap qpix("://images/c_bk.svg");
-            //qpix.load(QString("://images/c_bk.svg"));
-
-            img -> setPixmap(qpix);
-             //img->setMask(qpix.mask());
-            img -> setScaledContents(true);
-            Cell *sq = new Cell(pincel,img);
-            cells.push_back(sq);
-            layout->addWidget(sq, i/8, i%8);
+//dibujando los cuadros
+void Board::initializeBoard(int x, int y) {
+    uint16_t sizeCell = 70;
+    for (uint16_t i = 0; i < 8; i++) {
+        for (uint16_t j = 0; j < 8; j++) {
+            ChessCell *cell = new ChessCell();
+            core->collection[i][j] = cell;
+            cell->rowLoc = i;
+            cell->colLoc = j;
+            cell->setPos(x + sizeCell * j, y + sizeCell * i);
+            if ((i + j) % 2 == 0)
+                cell->setOriginalColor(QColor(255, 206, 158));
+            else
+                cell->setOriginalColor(QColor(209, 139, 71));
+            core->aggregateToScene(cell);
         }
-        this->setLayout(layout);
-
+    }
 
 }
 
-Board::~Board()
-{
-    delete ui;
+//agregando las piezas en las listas
+void Board::addPieces() {
+    for (uint16_t i = 0; i < 8; i++) {
+        for (uint16_t j = 0; j < 8; j++) {
+
+            ChessCell *cell = core->collection[i][j];
+            if (i < 2) {
+                static uint16_t k;
+                cell->placePiece(blackPieces[k]);
+                core->piecesInGame.append(blackPieces[k]);
+                core->aggregateToScene(blackPieces[k++]);
+            }
+            if (i > 5) {
+                static uint16_t h;
+                cell->placePiece(whitePieces[h]);
+                core->piecesInGame.append(whitePieces[h]);
+                core->aggregateToScene(whitePieces[h++]);
+            }
+
+        }
+    }
+}
+
+//inicializar las fichas blancas
+void Board::initializeWhite() {
+    ChessPiece *pieceToAdd;
+    for (int i = 0; i < 8; i++) {
+        pieceToAdd = new Pawn(*(new QString(Blancas)));
+        whitePieces.append(pieceToAdd);
+    }
+    pieceToAdd = new Tower(*(new QString(Blancas)));
+    whitePieces.append(pieceToAdd);
+    pieceToAdd = new Horse(*(new QString(Blancas)));
+    whitePieces.append(pieceToAdd);
+    pieceToAdd = new Bishop(*(new QString(Blancas)));
+    whitePieces.append(pieceToAdd);
+    pieceToAdd = new Queen(*(new QString(Blancas)));
+    whitePieces.append(pieceToAdd);
+    pieceToAdd = new King(*(new QString(Blancas)));
+    whitePieces.append(pieceToAdd);
+    pieceToAdd = new Bishop(*(new QString(Blancas)));
+    whitePieces.append(pieceToAdd);
+    pieceToAdd = new Horse(*(new QString(Blancas)));
+    whitePieces.append(pieceToAdd);
+    pieceToAdd = new Tower(*(new QString(Blancas)));
+    whitePieces.append(pieceToAdd);
+
+}
+
+//inicializando las piezas negras
+void Board::initializeBlack() {
+    ChessPiece *pieceToAdd;
+    pieceToAdd = new Tower(*(new QString(Negras)));
+    blackPieces.append(pieceToAdd);
+    pieceToAdd = new Horse(*(new QString(Negras)));
+    blackPieces.append(pieceToAdd);
+    pieceToAdd = new Bishop(*(new QString(Negras)));
+    blackPieces.append(pieceToAdd);
+    pieceToAdd = new Queen(*(new QString(Negras)));
+    blackPieces.append(pieceToAdd);
+    pieceToAdd = new King(*(new QString(Negras)));
+    blackPieces.append(pieceToAdd);
+    pieceToAdd = new Bishop(*(new QString(Negras)));
+    blackPieces.append(pieceToAdd);
+    pieceToAdd = new Horse(*(new QString(Negras)));
+    blackPieces.append(pieceToAdd);
+    pieceToAdd = new Tower(*(new QString(Negras)));
+    blackPieces.append(pieceToAdd);
+    for (int i = 0; i < 8; i++) {
+        pieceToAdd = new Pawn(*(new QString(Negras)));
+        blackPieces.append(pieceToAdd);
+    }
+}
+
+//resetea el board una vez haya ganado uno de los jugadores
+void Board::reset() {
+    initializeWhite();
+    initializeBlack();
+
+    int k = 0;
+    int h = 0;
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+
+            ChessCell *box = core->collection[i][j];
+            box->setHasChessPiece(false);
+            box->setChessPieceColor("NONE");
+            box->currentPiece = NULL;
+            if (i < 2) {
+
+                box->placePiece(blackPieces[k]);
+                blackPieces[k]->setMoved(true);
+                blackPieces[k]->firstMove = true;
+                core->piecesInGame.append(blackPieces[k++]);
+
+            }
+            if (i > 5) {
+
+                box->placePiece(whitePieces[h]);
+                whitePieces[h]->setMoved(true);
+                whitePieces[h]->firstMove = true;
+                core->piecesInGame.append(whitePieces[h++]);
+
+
+            }
+
+        }
+    }
+    core->setTurn(Blancas);
 }

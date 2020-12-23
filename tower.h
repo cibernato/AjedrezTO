@@ -1,12 +1,14 @@
 #ifndef TOWER_H
 #define TOWER_H
-
-
-class Tower
+#include "chesspiece.h"
+class Tower:public ChessPiece
 {
 public:
-    Tower();
+    Tower(QString team, QGraphicsItem *parent = 0);
+
     void setImage();
+    void move();
+
 };
 
 #endif // TOWER_H

@@ -1,24 +1,28 @@
-#ifndef BOARD_H
-#define BOARD_H
-
-#include <QWidget>
-#include <QVector>
-#include "cell.h"
-namespace Ui {
-class Board;
-}
-
-class Board : public QWidget
+#ifndef CHESSBOARD_H
+#define CHESSBOARD_H
+#include <QGraphicsRectItem>
+#include "chesspiece.h"
+class Board
 {
-    Q_OBJECT
-
 public:
-    explicit Board(QWidget *parent = nullptr);
-    ~Board();
+    Board();
 
+    //dibuja los cuadros
+    void initializeBoard(int x, int y);
+
+    //agrega las piezas al tablero
+    void addPieces();
+
+    //incluye las piezas blancas
+    void initializeWhite();
+
+    //incluye las piezas negras
+    void initializeBlack();
+
+    void reset();
 private:
-    Ui::Board *ui;
-    QVector<Cell*> cells;
+    QList <ChessPiece *> whitePieces;
+    QList <ChessPiece *> blackPieces;
 };
 
-#endif // BOARD_H
+#endif // CHESSBOARD_H
