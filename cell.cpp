@@ -2,17 +2,14 @@
 #include <QtGui>
 
 
-Cell::Cell()
-{
+Cell::Cell() {
 }
 
-Cell::Cell(QBrush* pincel):
-    pincel{pincel}
-{
+Cell::Cell(QBrush *pincel) :
+        pincel{pincel} {
 }
 
-void Cell::paintEvent(QPaintEvent *)
-{
+void Cell::paintEvent(QPaintEvent *) {
     QPainter painter(this);
     double height = this->height();
     double width = this->width();
@@ -27,10 +24,8 @@ void Cell::paintEvent(QPaintEvent *)
     img->setFixedHeight(this->height());
     layout->addWidget(img);
     this->setLayout(layout);
-    //img->show();
 }
 
-Cell::Cell(QBrush* pincel, QLabel* img):
-    pincel{pincel},img{img}
-{
+Cell::Cell(QBrush *pincel, QLabel *img) :
+        pincel{pincel}, img{img} {
 }

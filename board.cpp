@@ -12,11 +12,10 @@
 extern Core *core;
 
 Board::Board() {
-    initializeBlack();  //inicializar las fichas negras
-    initializeWhite();  //inicializar las fichas blancas
+    initializeBlack();
+    initializeWhite();
 }
 
-//dibujando los cuadros
 void Board::initializeBoard(int x, int y) {
     uint16_t sizeCell = 70;
     for (uint16_t i = 0; i < 8; i++) {
@@ -36,7 +35,6 @@ void Board::initializeBoard(int x, int y) {
 
 }
 
-//agregando las piezas en las listas
 void Board::addPieces() {
     for (uint16_t i = 0; i < 8; i++) {
         for (uint16_t j = 0; j < 8; j++) {
@@ -59,7 +57,6 @@ void Board::addPieces() {
     }
 }
 
-//inicializar las fichas blancas
 void Board::initializeWhite() {
     ChessPiece *pieceToAdd;
     for (int i = 0; i < 8; i++) {
@@ -85,7 +82,6 @@ void Board::initializeWhite() {
 
 }
 
-//inicializando las piezas negras
 void Board::initializeBlack() {
     ChessPiece *pieceToAdd;
     pieceToAdd = new Tower(*(new QString(Negras)));
@@ -110,7 +106,6 @@ void Board::initializeBlack() {
     }
 }
 
-//resetea el board una vez haya ganado uno de los jugadores
 void Board::reset() {
     initializeWhite();
     initializeBlack();

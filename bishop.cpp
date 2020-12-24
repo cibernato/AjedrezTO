@@ -2,83 +2,70 @@
 
 #include <QDebug>
 #include "core.h"
+
 extern Core *core;
-Bishop::Bishop(QString team,QGraphicsItem *parent):ChessPiece(team,parent)
-{
-    //se inicializa poniendo su imagen
+
+Bishop::Bishop(QString team, QGraphicsItem *parent) : ChessPiece(team, parent) {
     setImage();
 }
-/*Se encarga de colocar la imagen al objeto mediante Qpixmap*/
-void Bishop::setImage()
-{
-    if(side == Blancas)
+
+void Bishop::setImage() {
+    if (side == Blancas)
         setPixmap(QPixmap(":/img/img/bishop_w.png"));
     else
         setPixmap(QPixmap(":/img/img/bishop_b.png"));
 }
-/*Se encarga de como se mueve la pieza*/
-void Bishop::move()
-{
+
+void Bishop::move() {
     location.clear();
     int row = this->getCurrentCell()->rowLoc;
     int col = this->getCurrentCell()->colLoc;
     QString team = this->getSide();
-    //Diagonal izq arriba
 
-     for(int i = row-1,j = col-1; i >= 0 && j >=0; i--,j--) {
-       if(core->collection[i][j]->getChessPieceColor() == team ) {
-           break;
-
-       }
-       else
-       {
-           location.append(core->collection[i][j]);
-           if(CellSetup(location.last()) ){
-               break;
-           }
-       }
-    }
-     //Diagonal derecha arriba
-      for(int i = row-1,j = col+1; i >= 0 && j <= 7; i--,j++) {
-        if(core->collection[i][j]->getChessPieceColor() == team ) {
+    for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+        if (core->collection[i][j]->getChessPieceColor() == team) {
             break;
 
-        }
-        else
-        {
+        } else {
             location.append(core->collection[i][j]);
-            if(CellSetup(location.last())){
+            if (CellSetup(location.last())) {
                 break;
             }
         }
-     }
-      //Diagonal derecha abajo
-       for(int i = row+1,j = col+1; i <= 7 && j <= 7; i++,j++) {
-         if(core->collection[i][j]->getChessPieceColor() == team ) {
-             break;
-         }
-         else
-         {location.append(core->collection[i][j]);
-             if(CellSetup(location.last())){
-                 break;
-             }
-         }
-      }
-       //Diagonal izq abajo
+    }
+    for (int i = row - 1, j = col + 1; i >= 0 && j <= 7; i--, j++) {
+        if (core->collection[i][j]->getChessPieceColor() == team) {
+            break;
 
-        for(int i = row+1,j = col-1; i <= 7 && j >= 0; i++,j--) {
-          if(core->collection[i][j]->getChessPieceColor() == team ) {
-              break;
-          }
-          else
-          {
-              location.append(core->collection[i][j]);
-              if(CellSetup(location.last())){
-                  break;
-              }
+        } else {
+            location.append(core->collection[i][j]);
+            if (CellSetup(location.last())) {
+                break;
+            }
+        }
+    }
+    for (int i = row + 1, j = col + 1; i <= 7 && j <= 7; i++, j++) {
+        if (core->collection[i][j]->getChessPieceColor() == team) {
+            break;
+        } else {
+            location.append(core->collection[i][j]);
+            if (CellSetup(location.last())) {
+                break;
+            }
+        }
+    }
 
-          }
-       }
+    for (int i = row + 1, j = col - 1; i <= 7 && j >= 0; i++, j--) {
+        if (core->collection[i][j]->getChessPieceColor() == team) {
+            break;
+        } else {
+            location.append(core->collection[i][j]);
+            if (CellSetup(location.last())) {
+                break;
+            }
+
+        }
+    }
 
 
 }

@@ -2,14 +2,17 @@
 #define KING_H
 
 #include "chesspiece.h"
-class King:public ChessPiece
-{
+
+class King : public ChessPiece {
 public:
-    King(QString team,QGraphicsItem *parent = 0);
+    King(QString team, QGraphicsItem *parent = 0);
+
     void setImage();
+
     void findUnSafeLocation();
+
     void move();
 
 };
 
-#endif // KING_H
+#endif
